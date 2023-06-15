@@ -58,6 +58,16 @@ namespace NewsLetterExercise.UnitTest
         }
 
         [Test]
+        public void Test_InitialIsConfirmed()
+        {
+            var name = "Mr Test";
+            var email = "test@test.com";
+            var subscription = new SubscriptionModel(Guid.NewGuid(), name, email);
+
+            Assert.IsFalse(subscription.IsConfirmed);
+        }
+
+        [Test]
         public void Test_ConfirmSubscription_ValidConfirmationCode()
         {
             var name = "Mr Test";
