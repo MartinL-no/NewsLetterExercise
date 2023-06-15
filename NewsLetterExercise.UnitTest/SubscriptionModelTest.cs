@@ -5,6 +5,17 @@ namespace NewsLetterExercise.UnitTest
     public class SubscriptionModelTests
     {
         [Test]
+        public void Test_ValidName()
+        {
+            var name = "Mr Test";
+            var email = "test@test.com";
+            var subscription = new SubscriptionModel(Guid.NewGuid(), name, email);
+            
+
+            Assert.AreEqual(name, subscription.Name);
+        }
+
+        [Test]
         public void Test_InvalidName()
         {
             var name = "";
@@ -12,6 +23,16 @@ namespace NewsLetterExercise.UnitTest
 
             var exception = Assert.Throws<ArgumentException>(() => new SubscriptionModel(Guid.NewGuid(), name, email));
             Assert.That(exception.Message, Is.EqualTo("Name cannot be null or empty (Parameter 'name')"));
+        }
+
+        [Test]
+        public void Test_ValidEmail()
+        {
+            var name = "Mr Test";
+            var email = "test@test.com";
+            var subscription = new SubscriptionModel(Guid.NewGuid(), name, email);
+            
+            Assert.AreEqual(email, subscription.Email);
         }
 
         [Test]
@@ -25,37 +46,12 @@ namespace NewsLetterExercise.UnitTest
         }
 
         [Test]
-        public void Test_CreateSubscription_Name()
+        public void Test_ConfirmationCode()
         {
             var name = "Mr Test";
             var email = "test@test.com";
-            var subscriptionModel = new SubscriptionModel(Guid.NewGuid(), name, email);
-            
-            var confirmation = subscriptionModel.CreateSubscription();
-
-            Assert.AreEqual(name, confirmation.Name);
-        }
-
-        [Test]
-        public void Test_CreateSubscription_Email()
-        {
-            var name = "Mr Test";
-            var email = "test@test.com";
-            var subscriptionModel = new SubscriptionModel(Guid.NewGuid(), name, email);
-            
-            var confirmation = subscriptionModel.CreateSubscription();
-
-            Assert.AreEqual(email, confirmation.Email);
-        }
-
-        [Test]
-        public void Test_CreateSubscription_ConfirmationCode()
-        {
-            var name = "Mr Test";
-            var email = "test@test.com";
-            var subscriptionModel = new SubscriptionModel(Guid.NewGuid(), name, email);
-            
-            var confirmationCode = subscriptionModel.CreateSubscription().ConfirmationCode;
+            var subscription = new SubscriptionModel(Guid.NewGuid(), name, email);
+            var confirmationCode = subscription.ConfirmationCode;
 
             Assert.That(confirmationCode, Is.TypeOf<Guid>());
             Assert.IsNotNull(confirmationCode);
@@ -66,10 +62,10 @@ namespace NewsLetterExercise.UnitTest
         {
             var name = "Mr Test";
             var email = "test@test.com";
-            var subscriptionModel = new SubscriptionModel(Guid.NewGuid(), name, email);
+            var subscription = new SubscriptionModel(Guid.NewGuid(), name, email);
             
-            var confirmationCode = subscriptionModel.CreateSubscription().ConfirmationCode;
-            bool isConfirmed = subscriptionModel.ConfirmSubscription(confirmationCode);
+            var confirmationCode = subscription.ConfirmationCode;
+            bool isConfirmed = subscription.ConfirmSubscription(confirmationCode);
 
             Assert.IsTrue(isConfirmed);
         }

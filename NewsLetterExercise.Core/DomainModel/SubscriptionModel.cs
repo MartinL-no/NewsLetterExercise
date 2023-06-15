@@ -4,9 +4,9 @@ namespace NewsLetterExercise.Core.DomainModel
 {
     public class SubscriptionModel : BaseModel
     {
-        private readonly string _name;
-        private readonly string _email;
-        private readonly Guid _confirmationCode;
+        public readonly string Name;
+        public readonly string Email;
+        public readonly Guid ConfirmationCode;
         private bool _isConfirmed;
 
         public SubscriptionModel(Guid Id, string name, string email) : base(Id)
@@ -19,7 +19,7 @@ namespace NewsLetterExercise.Core.DomainModel
             try
             {
                 var validEmail = new MailAddress(email);
-                _email = validEmail.Address;
+                Email = validEmail.Address;
 
             }
             catch (FormatException)
@@ -27,19 +27,14 @@ namespace NewsLetterExercise.Core.DomainModel
                 throw new FormatException("Invalid email address");
             }
 
-            _name = name;
+            Name = name;
+            ConfirmationCode = Guid.NewGuid();
             _isConfirmed = false;
-            _confirmationCode = Guid.NewGuid();
-        }
-
-        public ConfirmationModel CreateSubscription()
-        {
-            return new ConfirmationModel(_name, _email, _confirmationCode);
         }
 
         public bool ConfirmSubscription(Guid confirmationCode)
         {
-            if (_confirmationCode == confirmationCode)
+            if (ConfirmationCode == confirmationCode)
             {
                 _isConfirmed = true;
                 return true;
