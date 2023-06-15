@@ -1,8 +1,51 @@
-﻿namespace NewsLetterExercise.Core.DomainModel
-{
-    public class SubscriptionModel
-    {
+﻿using System.Net.Mail;
 
+namespace NewsLetterExercise.Core.DomainModel
+{
+    public class SubscriptionModel : BaseModel
+    {
+        private readonly string _name;
+        private readonly string _email;
+        private readonly Guid _confirmationCode;
+        private bool _isConfirmed;
+
+        public SubscriptionModel(Guid Id, string name, string email) : base(Id)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentException("Name cannot be null or empty", nameof(name));
+            }
+
+            try
+            {
+                var validEmail = new MailAddress(email);
+                _email = validEmail.Address;
+
+            }
+            catch (FormatException)
+            {
+                throw new FormatException("Invalid email address");
+            }
+
+            _name = name;
+            _isConfirmed = false;
+            _confirmationCode = Guid.NewGuid();
+        }
+
+        public ConfirmationModel CreateSubscription()
+        {
+            return new ConfirmationModel(_name, _email, _confirmationCode);
+        }
+
+        public bool ConfirmSubscription(Guid confirmationCode)
+        {
+            if (_confirmationCode == confirmationCode)
+            {
+                _isConfirmed = true;
+                return true;
+            }
+            return false;
+        }
     }
 }
 
