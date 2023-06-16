@@ -7,9 +7,8 @@ namespace NewsLetterExercise.Core.DomainModel
         public readonly string Name;
         public readonly string Email;
         public readonly Guid ConfirmationCode;
-        private bool _isConfirmed;
-
-        public SubscriptionModel(Guid Id, string name, string email) : base(Id)
+        public bool IsConfirmed { get; private set; }
+        public SubscriptionModel(Guid id, string name, string email) : base(id)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -29,14 +28,27 @@ namespace NewsLetterExercise.Core.DomainModel
 
             Name = name;
             ConfirmationCode = Guid.NewGuid();
-            _isConfirmed = false;
+            IsConfirmed = false;
+        }
+
+        public SubscriptionModel(Guid id, string name, string email, Guid confirmationCode, bool isConfirmed): base(id)
+        {
+            Name = name;
+            Email = email;
+            ConfirmationCode = confirmationCode;
+            IsConfirmed = isConfirmed;
+        }
+
+        public EmailModel GetSubscriptionEmail()
+        {
+            return new EmailModel(Name, Email, ConfirmationCode);
         }
 
         public bool ConfirmSubscription(Guid confirmationCode)
         {
             if (ConfirmationCode == confirmationCode)
             {
-                _isConfirmed = true;
+                IsConfirmed = true;
                 return true;
             }
             return false;
