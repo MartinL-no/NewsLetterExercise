@@ -15,7 +15,6 @@ namespace NewsLetterExercise.Infrastructure.EmailSender
         {
              var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
             _client = new SendGridClient(apiKey);
-            //"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"
         }
 
         public async Task<bool> SendEmail(EmailModel email)
